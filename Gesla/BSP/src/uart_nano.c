@@ -96,7 +96,7 @@ void USART2_IRQHandler(void)
 		//**********************//
 		RecFlag=1;
 		RecCnt=uartRecCnt;
-		printf("data0 = %d, data1 = %d, data2 = %d, data3 = %d\r\n", Uart2_DMA_Buffer[0], Uart2_DMA_Buffer[1], Uart2_DMA_Buffer[2], Uart2_DMA_Buffer[3]);
+		printf("recv data0 = %d, data1 = %d, data2 = %d, data3 = %d\r\n", Uart2_DMA_Buffer[0], Uart2_DMA_Buffer[1], Uart2_DMA_Buffer[2], Uart2_DMA_Buffer[3]);
 		
 		//clean
 		DMA_Cmd(DMA1_Channel6, DISABLE ); 
@@ -104,5 +104,19 @@ void USART2_IRQHandler(void)
 		DMA_Cmd(DMA1_Channel6, ENABLE);     
 		
 		USART_ClearITPendingBit(USART2,USART_IT_IDLE);    
+	}
+}
+
+static uint8_t uart2_tx_buf[60] = {0};  //·¢ËÍ»º³å
+void UART_NANO_SendPacket(uint8_t *pbuf, uint8_t len)
+{
+	uint8_t i;	
+
+	for(i=0; i<len; i++)
+	{
+		uart2_tx_buf[i] = *(pbuf+i);
+		USART_SendData(USART2, uart2_tx_buf[i]);
+		printf("send data[%d]: %d  \r\n", i, uart2_tx_buf[i]);
+		while(USART_GetFlagStatus(USART2,USART_FLAG_TC) != SET);
 	}
 }

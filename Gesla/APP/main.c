@@ -20,13 +20,20 @@ int main(void)
 	
 	while(1){};/* 任务调度后不会执行到这 */
 }
-
+uint8_t send_test[4] = {0};
 void test_task(void* param)
 {
 	for(;;)
 	{
-		vTaskDelay(100);
+		vTaskDelay(1000);
 		printf("task running \r\n");
+		
+		//send test
+		send_test[0] = send_test[3]+2;
+		send_test[1] = send_test[0]+2;
+		send_test[2] = send_test[1]+2;
+		send_test[3] = send_test[2]+2;
+		UART_NANO_SendPacket(send_test, 4);
 	}
 }
 
