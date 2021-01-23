@@ -1,7 +1,11 @@
+/*
+** A single spark can start a prairie fire.
+*/
+
 #include "stm32f10x.h"
 #include <stdio.h>
 
-/* FreeRtos includes */
+/* FreeRTOS includes */
 #include "FreeRTOS.h"
 #include "task.h"
 
