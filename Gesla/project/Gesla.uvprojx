@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\STM32F10x_FWLib\inc;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\CORE;..\APP;..\APP\inc;..\BSP\inc</IncludePath>
+              <IncludePath>..\STM32F10x_FWLib\inc;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\CORE;..\APP;..\APP\inc;..\BSP\inc;..\Driver\inc;..\TASK\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -387,6 +387,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\main.c</FilePath>
             </File>
+            <File>
+              <FileName>sysinit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\sysinit.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -401,6 +406,16 @@
               <FileName>uart_nano.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\src\uart_nano.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\src\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>vin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\src\vin.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -521,6 +536,26 @@
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CORE\system_stm32f10x.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>battery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\src\battery.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>TASK</GroupName>
+          <Files>
+            <File>
+              <FileName>task_start.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\src\task_start.c</FilePath>
             </File>
           </Files>
         </Group>
