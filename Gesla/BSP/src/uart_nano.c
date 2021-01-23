@@ -85,6 +85,7 @@ void UART_DMA_Init(void)
 
 uint8_t RecFlag;
 uint16_t RecCnt;
+float chassis_speed_target[3] = {0};
 void USART2_IRQHandler(void)            
 {
 	uint16_t uartRecCnt=0;
@@ -96,8 +97,12 @@ void USART2_IRQHandler(void)
 		//**********************//
 		RecFlag=1;
 		RecCnt=uartRecCnt;
-		printf("recv data0 = %d, data1 = %d, data2 = %d, data3 = %d\r\n", Uart2_DMA_Buffer[0], Uart2_DMA_Buffer[1], Uart2_DMA_Buffer[2], Uart2_DMA_Buffer[3]);
-		
+		//printf("recv data0 = %d, data1 = %d, data2 = %d, data3 = %d\r\n", Uart2_DMA_Buffer[0], Uart2_DMA_Buffer[1], Uart2_DMA_Buffer[2], Uart2_DMA_Buffer[3]);
+		chassis_speed_target[0] = (int16_t)((Uart2_DMA_Buffer[0]<<8) | Uart2_DMA_Buffer[1]);
+		chassis_speed_target[1] = (int16_t)((Uart2_DMA_Buffer[2]<<8) | Uart2_DMA_Buffer[3]);
+		chassis_speed_target[2] = (int16_t)((Uart2_DMA_Buffer[4]<<8) | Uart2_DMA_Buffer[5]);
+
+		printf("speed_target x:%f, y:%f, z:%f \r\n", chassis_speed_target[0], chassis_speed_target[1], chassis_speed_target[2]);
 		//clean
 		DMA_Cmd(DMA1_Channel6, DISABLE ); 
 		DMA_SetCurrDataCounter(DMA1_Channel6, sizeof(Uart2_DMA_Buffer));
