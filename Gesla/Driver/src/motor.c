@@ -91,22 +91,22 @@ void Motor_A_SetSpeed(int16_t speed)
 {
 	uint16_t temp;
 
-  if(speed > 0)
+	if(speed > 0)
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_4);
-	  GPIO_SetBits(GPIOC, GPIO_Pin_5);
+		GPIO_SetBits(GPIOC, GPIO_Pin_5);
 		temp = speed;	
 	}
 	else if(speed < 0)
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_5);
-	  GPIO_SetBits(GPIOC, GPIO_Pin_4);
+		GPIO_SetBits(GPIOC, GPIO_Pin_4);
 		temp = (-speed);
 	}
 	else
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_4);
-	  GPIO_ResetBits(GPIOC, GPIO_Pin_5);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_5);
 		temp = 0;
 	}
 	
@@ -129,13 +129,13 @@ void Motor_B_SetSpeed(int16_t speed)
 	else if(speed < 0)
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_3);
-	  GPIO_SetBits(GPIOC, GPIO_Pin_2);
+		GPIO_SetBits(GPIOC, GPIO_Pin_2);
 		temp = (-speed);
 	}
 	else
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_2);
-	  GPIO_ResetBits(GPIOC, GPIO_Pin_3);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_3);
 		temp = 0;
 	}
 	
@@ -149,22 +149,22 @@ void Motor_C_SetSpeed(int16_t speed)
 {
 	uint16_t temp;
 
-  if(speed > 0)
+	if(speed > 0)
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_1);
-	  GPIO_SetBits(GPIOC, GPIO_Pin_0);
+		GPIO_SetBits(GPIOC, GPIO_Pin_0);
 		temp = speed;	
 	}
 	else if(speed < 0)
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_0);
-	  GPIO_SetBits(GPIOC, GPIO_Pin_1);
+		GPIO_SetBits(GPIOC, GPIO_Pin_1);
 		temp = (-speed);
 	}
 	else
 	{
 		GPIO_ResetBits(GPIOC, GPIO_Pin_1);
-	  GPIO_ResetBits(GPIOC, GPIO_Pin_0);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_0);
 		temp = 0;
 	}
 	
@@ -178,22 +178,22 @@ void Motor_D_SetSpeed(int16_t speed)
 {
 	uint16_t temp;
 
-  if(speed > 0)
+	if(speed > 0)
 	{
 		GPIO_ResetBits(GPIOA, GPIO_Pin_11);
-	  GPIO_SetBits(GPIOA, GPIO_Pin_12);
+		GPIO_SetBits(GPIOA, GPIO_Pin_12);
 		temp = speed;	
 	}
 	else if(speed < 0)
 	{
 		GPIO_ResetBits(GPIOA, GPIO_Pin_12);
-	  GPIO_SetBits(GPIOA, GPIO_Pin_11);
+		GPIO_SetBits(GPIOA, GPIO_Pin_11);
 		temp = (-speed);
 	}
 	else
 	{
 		GPIO_ResetBits(GPIOA, GPIO_Pin_11);
-	  GPIO_ResetBits(GPIOA, GPIO_Pin_12);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_12);
 		temp = 0;
 	}
 	

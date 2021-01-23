@@ -102,11 +102,13 @@ void USART2_IRQHandler(void)
 		chassis_speed_target[1] = (int16_t)((Uart2_DMA_Buffer[2]<<8) | Uart2_DMA_Buffer[3]);
 		chassis_speed_target[2] = (int16_t)((Uart2_DMA_Buffer[4]<<8) | Uart2_DMA_Buffer[5]);
 
-		printf("speed_target x:%f, y:%f, z:%f \r\n", chassis_speed_target[0], chassis_speed_target[1], chassis_speed_target[2]);
+//		printf("speed_target x:%f, y:%f, z:%f \r\n", chassis_speed_target[0], chassis_speed_target[1], chassis_speed_target[2]);
 		//clean
 		DMA_Cmd(DMA1_Channel6, DISABLE ); 
 		DMA_SetCurrDataCounter(DMA1_Channel6, sizeof(Uart2_DMA_Buffer));
 		DMA_Cmd(DMA1_Channel6, ENABLE);     
+		
+//		memset(chassis_speed_target, 0, 100);
 		
 		USART_ClearITPendingBit(USART2,USART_IT_IDLE);    
 	}

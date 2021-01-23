@@ -567,6 +567,11 @@
               <FileType>1</FileType>
               <FilePath>..\TASK\src\task_start.c</FilePath>
             </File>
+            <File>
+              <FileName>task_chassis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TASK\src\task_chassis.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

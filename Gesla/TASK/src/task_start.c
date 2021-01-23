@@ -12,15 +12,26 @@
 /* Driver */
 #include "battery.h"
 
+/* TASK */
+#include "task_chassis.h"
+
+#define STK_SIZE_128 	128 
+#define STK_SIZE_256	256
+#define STK_SIZE_512 	512
+
 /* task create */
-#define START_TASK_PRIO  6  				
-#define STK_SIZE_128 	128 				
+#define START_TASK_PRIO  6  						
 TaskHandle_t StartTask_Handler; 			
 void Start_Task(void *pvParameters); 		
 
 #define TASK_1000ms_PRIO 2  					
 TaskHandle_t  Task_1000ms_Handler; 			
-void Task_1000ms(void *pvParameters); 		
+void Task_1000ms(void *pvParameters); 	
+
+#define TASK_Chassis_PRIO 4  					
+TaskHandle_t  Task_Chassis_Handler; 			
+void Task_Chassis(void *pvParameters); 
+
 
 void test_task(void* param);
 
@@ -49,7 +60,16 @@ void Start_Task(void *param)
 				(void* )NULL,
 				(UBaseType_t )TASK_1000ms_PRIO,
 				(TaskHandle_t* )&Task_1000ms_Handler);	
+				
+	//chassis task
+	xTaskCreate((TaskFunction_t )Task_Chassis,
+				(const char* )"Task_Chassis",
+				(uint16_t )STK_SIZE_256,
+				(void* )NULL,
+				(UBaseType_t )TASK_Chassis_PRIO,
+				(TaskHandle_t* )&Task_Chassis_Handler);	
 	
+	xTaskCreate(test_task, "test_task", 100, NULL, 6, NULL);
 	xTaskCreate(test_task, "test_task", 100, NULL, 6, NULL);
 	
 	/*------------------------------------------------*/
