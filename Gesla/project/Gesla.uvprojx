@@ -392,6 +392,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\sysinit.c</FilePath>
             </File>
+            <File>
+              <FileName>kinematics.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\src\kinematics.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -556,6 +561,11 @@
               <FileName>motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Driver\src\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_encoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\src\motor_encoder.c</FilePath>
             </File>
           </Files>
         </Group>

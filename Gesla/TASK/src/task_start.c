@@ -97,7 +97,7 @@ void test_task(void* param)
 	for(;;)
 	{
 		vTaskDelay(1000);
-		printf("task running \r\n");
+//		printf("task running \r\n");
 		
 		//send test
 		send_test[0] = send_test[3]+2;

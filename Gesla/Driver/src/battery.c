@@ -4,6 +4,7 @@
 #include "battery.h"
 #include "led.h"
 #include "vin.h"
+#include "motor.h"
 
 #define VBAT_VOL_CHG    1050 
 #define VBAT_VOL_OFF    990  
@@ -24,7 +25,11 @@ void Battery_Management(void)
 		if(bat_vol < VBAT_VOL_OFF) //990
 		{
 			LED_Red_On();
-			LED_Green_Off();					
+			LED_Green_Off();	
+			Motor_A_SetSpeed(0);
+			Motor_B_SetSpeed(0);
+			Motor_C_SetSpeed(0);
+			Motor_D_SetSpeed(0);			
 		}
 	}
 	else

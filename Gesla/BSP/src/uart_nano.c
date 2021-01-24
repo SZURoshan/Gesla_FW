@@ -85,7 +85,7 @@ void UART_DMA_Init(void)
 
 uint8_t RecFlag;
 uint16_t RecCnt;
-float chassis_speed_target[3] = {0};
+int16_t chassis_speed_target[3] = {0};
 void USART2_IRQHandler(void)            
 {
 	uint16_t uartRecCnt=0;
@@ -123,7 +123,7 @@ void UART_NANO_SendPacket(uint8_t *pbuf, uint8_t len)
 	{
 		uart2_tx_buf[i] = *(pbuf+i);
 		USART_SendData(USART2, uart2_tx_buf[i]);
-		printf("send data[%d]: %d  \r\n", i, uart2_tx_buf[i]);
+		//printf("send data[%d]: %d  \r\n", i, uart2_tx_buf[i]);
 		while(USART_GetFlagStatus(USART2,USART_FLAG_TC) != SET);
 	}
 }

@@ -7,18 +7,13 @@ void Motor_Init(uint8_t freq_khz)
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure; 
 
-	//定时器通道IO配置
-	//GPIO及复用功能时钟使能
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO, ENABLE);	
 
-	//配置IO口为复用功能-定时器通道
 	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-	//电机方向控制IO配置
-	//IO时钟使能
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE);
 
 	//电机A方向控制IO
@@ -60,7 +55,7 @@ void Motor_Init(uint8_t freq_khz)
 	//PWM1 Mode configuration: Channel1 
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = 0;	    //占空比初始化
+	TIM_OCInitStructure.TIM_Pulse = 0;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	TIM_OC1Init(TIM8, &TIM_OCInitStructure);
 	TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);
@@ -82,7 +77,7 @@ void Motor_Init(uint8_t freq_khz)
 	//TIM enable counter
 	TIM_Cmd(TIM8, ENABLE);   
 
-	//使能MOE位
+	//enable MOE bit
 	TIM_CtrlPWMOutputs(TIM8,ENABLE);	
 }
 
