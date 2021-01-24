@@ -48,9 +48,9 @@ void Kinematics_Analysis(int16_t* input, int16_t* output)
 double ticks_per_meter = 0;
 void Inverse_Kinematics_Analysis(int16_t* input, int16_t* output)
 {
-	float x_speed = ((float)input[0])/7;
-	float y_speed = ((float)input[1])/7;
-	float z_speed = ((float)input[2])/7;
+	float x_speed = ((float)input[0])/1000;
+	float y_speed = ((float)input[1])/1000;
+	float z_speed = ((float)input[2])/1000;
 	static float wheel_velocity[4] = {0};
 	
 	ticks_per_meter = (float)ENCODER_RESOLUTION/(WHEEL_DIAMETER*PI);
@@ -65,9 +65,9 @@ void Inverse_Kinematics_Analysis(int16_t* input, int16_t* output)
 	output[1] = (int16_t)(wheel_velocity[1] * ticks_per_meter/PID_RATE);
 	output[2] = (int16_t)(wheel_velocity[2] * ticks_per_meter/PID_RATE);
 	output[3] = (int16_t)(wheel_velocity[3] * ticks_per_meter/PID_RATE);
-	
-//	printf("output target 0: %d \r\n", output[0]);
-//	printf("output target 1: %d \r\n", output[1]);
-//	printf("output target 2: %d \r\n", output[2]);
-//	printf("output target 3: %d \r\n", output[3]);
+//	output[0] = (int16_t)wheel_velocity[0];
+//	output[1] = (int16_t)wheel_velocity[1];
+//	output[2] = (int16_t)wheel_velocity[2];
+//	output[3] = (int16_t)wheel_velocity[3];
+
 }
