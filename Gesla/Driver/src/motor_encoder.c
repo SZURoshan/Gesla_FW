@@ -8,21 +8,21 @@ void Moter_Encoder_AB_Init(uint16_t cycle)
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_ICInitTypeDef TIM_ICInitStructure;   
 
-	//GPIO功能时钟使能
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
 
 	GPIO_PinRemapConfig(GPIO_FullRemap_TIM2, ENABLE);
-
-	//配置IO口为复用功能-定时器通道
+	
+	/*****************WARNING**************/
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable , ENABLE);//must disable JTAG,otherwise the TIM2 can't be uesed
+	
 	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_3;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;        //复用功能
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//速度100MHz
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_15;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	//TIM时钟使能
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
 	//Timer configuration in Encoder mode 

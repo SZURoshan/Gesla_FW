@@ -32,7 +32,7 @@ int16_t Chassis_Motor_C_Speed_PID(int16_t speed_target, int16_t speed_measure);
 int16_t Chassis_Motor_D_Speed_PID(int16_t speed_target, int16_t speed_measure);
 
 #define CHASSIS_SPEED_MAX 2000
-#define CHASSIS_TASK_TIME_INCREMENT 20
+#define CHASSIS_TASK_TIME_INCREMENT 2
 
 /******************************param define******************************/
 int16_t motor_encoder_accumulator[4]  = {0};//for NANO
@@ -79,10 +79,10 @@ void Chassis_MoveCtl(void)
 	motor_encoder_delta[3] =  ( Moter_Encoder_GH_GetCounter() - MOTOR_ENCODER_MID_VALUE );
 
 	//Sets the encoder median
-//	Moter_Encoder_AB_SetCounter(MOTOR_ENCODER_MID_VALUE); 
-//	Moter_Encoder_CD_SetCounter(MOTOR_ENCODER_MID_VALUE); 
-//	Moter_Encoder_EF_SetCounter(MOTOR_ENCODER_MID_VALUE); 
-//	Moter_Encoder_GH_SetCounter(MOTOR_ENCODER_MID_VALUE);
+	Moter_Encoder_AB_SetCounter(MOTOR_ENCODER_MID_VALUE); 
+	Moter_Encoder_CD_SetCounter(MOTOR_ENCODER_MID_VALUE); 
+	Moter_Encoder_EF_SetCounter(MOTOR_ENCODER_MID_VALUE); 
+	Moter_Encoder_GH_SetCounter(MOTOR_ENCODER_MID_VALUE);
 
 	//Calculate the cumulative value of the encoder
 	motor_encoder_accumulator[0] += motor_encoder_delta[0];
@@ -109,10 +109,10 @@ void Chassis_MoveCtl(void)
 	motor_pwm_final_output[2] = Chassis_Motor_C_Speed_PID(motor_encoder_delta_target[2], motor_encoder_delta[2]);   
 	motor_pwm_final_output[3] = Chassis_Motor_D_Speed_PID(motor_encoder_delta_target[3], motor_encoder_delta[3]);  
 	
-	printf("output 0: %d \r\n", Moter_Encoder_AB_GetCounter());
-	printf("output 1: %d \r\n", Moter_Encoder_CD_GetCounter());
-//	printf("output 2: %d \r\n", Moter_Encoder_EF_GetCounter());
-//	printf("output 3: %d \r\n", Moter_Encoder_GH_GetCounter());
+	printf("output 0: %d \r\n", motor_encoder_accumulator[0]);
+	printf("output 1: %d \r\n", motor_encoder_accumulator[1]);
+	printf("output 2: %d \r\n", motor_encoder_accumulator[2]);
+	printf("output 3: %d \r\n", motor_encoder_accumulator[3]);
 
 #if 0
 	Motor_A_SetSpeed( motor_pwm_final_output[0] );
