@@ -17,6 +17,8 @@
 
 int main(void)
 {	
+	SCB->VTOR = FLASH_BASE | 0x4000;
+	
 	System_Init();
 
 	App_Task_Create();
