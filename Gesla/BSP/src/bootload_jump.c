@@ -1,0 +1,25 @@
+#include "bootload_jump.h"
+#include <stdio.h>
+
+
+__asm void MSR_MSP(u32 addr) 
+{
+    MSR MSP, r0 			//set Main Stack value
+    BX r14
+}
+
+typedef  void (*iapfun)(void);
+iapfun jump2app; 
+void iap_load_app(u32 appxaddr)
+{
+	if(((*(vu32*)appxaddr)&0x2FFE0000)==0x20000000)	//检查OTA bin里面的栈顶地址是否合法.
+	{ 
+		jump2app=(iapfun)*(vu32*)(appxaddr+4);		//用户代码区第二个字为程序开始地址(复位地址)		
+		MSR_MSP(*(vu32*)appxaddr);					//初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址)
+		jump2app();									//跳转到APP.
+	}
+	else
+	{
+		printf("illegal ota bin MSP: %x \r\n", ((*(vu32*)appxaddr)&0x2FFE0000) );
+	}
+}

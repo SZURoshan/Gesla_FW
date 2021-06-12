@@ -422,6 +422,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\src\vin.c</FilePath>
             </File>
+            <File>
+              <FileName>bootload_jump.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\src\bootload_jump.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

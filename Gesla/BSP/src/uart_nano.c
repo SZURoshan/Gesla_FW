@@ -92,7 +92,7 @@ void USART2_IRQHandler(void)
 
 	if(USART_GetITStatus(USART2, USART_IT_IDLE) != RESET)
 	{
-		USART_ReceiveData(USART2);
+		USART_ReceiveData(USART2);/* 清空闲中断标志位 */
 		uartRecCnt = sizeof(Uart2_DMA_Buffer) - DMA_GetCurrDataCounter(DMA1_Channel6); 
 		//**********************//
 		RecFlag=1;

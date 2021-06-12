@@ -144,7 +144,7 @@ int16_t Chassis_Motor_A_Speed_PID(int16_t speed_target, int16_t speed_measure)
 	//calc error
 	speed_error = speed_target - speed_measure;//for P term
 	speed_error_accum += speed_error;//for I term
-	printf("speed_error A: %d\r\n",speed_error);
+	//printf("speed_error A: %d\r\n",speed_error);
 	//P term
 	pTermChassis = speed_error * Chassis_motor_kP;
 	
@@ -178,7 +178,7 @@ int16_t Chassis_Motor_B_Speed_PID(int16_t speed_target, int16_t speed_measure)
 	//calc error
 	speed_error = speed_target - speed_measure;//for P term
 	speed_error_accum += speed_error;//for I term
-	printf("speed_error B: %d\r\n",speed_error);
+	//printf("speed_error B: %d\r\n",speed_error);
 	//P term
 	pTermChassis = speed_error * Chassis_motor_kP;
 	
@@ -212,7 +212,7 @@ int16_t Chassis_Motor_C_Speed_PID(int16_t speed_target, int16_t speed_measure)
 	//calc error
 	speed_error = speed_target - speed_measure;//for P term
 	speed_error_accum += speed_error;//for I term
-	printf("speed_error C: %d\r\n",speed_error);
+	//printf("speed_error C: %d\r\n",speed_error);
 	//P term
 	pTermChassis = speed_error * Chassis_motor_kP;
 	
@@ -246,7 +246,7 @@ int16_t Chassis_Motor_D_Speed_PID(int16_t speed_target, int16_t speed_measure)
 	//calc error
 	speed_error = speed_target - speed_measure;//for P term
 	speed_error_accum += speed_error;//for I term
-	printf("speed_error D: %d\r\n",speed_error);
+	//printf("speed_error D: %d\r\n",speed_error);
 	//P term
 	pTermChassis = speed_error * Chassis_motor_kP;
 	

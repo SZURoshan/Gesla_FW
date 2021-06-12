@@ -1,8 +1,14 @@
 #include "uart_db.h"
 #include <stdio.h>
+#include <string.h>
 
 
-static uint8_t uart_db_rx_buf[40];     //接收缓冲，数据内容小于等于32Byte
+/* BSP */
+#include "bootload_jump.h"
+
+//static uint8_t uart_db_rx_buf[40];     //接收缓冲，数据内容小于等于32Byte
+#define UART1_DMA_SIZE 20
+uint8_t Uart1_DMA_Buffer[ UART1_DMA_SIZE ] = {0};//dma buff addr
 
 /**
   * @简  述  UART DB调试串口初始化
@@ -47,10 +53,40 @@ void UART_DB_Init(uint32_t baud)
 	NVIC_Init(&NVIC_InitStructure);//初始化配置NVIC
 	
 	//使能串口接收中断
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+	
+	USART_DMACmd( USART1, USART_DMAReq_Rx, ENABLE );
+	
+	//DMA configure
+	UART1_DMA_Init();
 	
 	//使能 USART， 配置完毕
 	USART_Cmd(USART1, ENABLE);
+}
+
+void UART1_DMA_Init(void)
+{
+	DMA_InitTypeDef DMA_InitStructure;
+	
+	RCC_AHBPeriphClockCmd( RCC_AHBPeriph_DMA1, ENABLE );                            /* 使能DMA传输 */
+	
+	/* Reset DMAy Channelx remaining bytes register 这样就不会往后塞，直接覆盖*/
+	DMA_DeInit( DMA1_Channel5 );                                                          /* 将DMA的通道1寄存器重设为缺省值 */
+	
+	DMA_InitStructure.DMA_PeripheralBaseAddr	= (uint32_t)&(USART1->DR);                         /* DMA外设ADC基地址 */
+	DMA_InitStructure.DMA_MemoryBaseAddr		= (uint32_t)Uart1_DMA_Buffer;                         /* DMA内存基地址 */
+	DMA_InitStructure.DMA_DIR			        = DMA_DIR_PeripheralSRC;        /* 数据传输方向，从内存读取发送到外设 */
+	DMA_InitStructure.DMA_BufferSize		    = UART1_DMA_SIZE;                            /* DMA通道的DMA缓存的大小 */
+	DMA_InitStructure.DMA_PeripheralInc		    = DMA_PeripheralInc_Disable;    /* 外设地址寄存器不变 */
+	DMA_InitStructure.DMA_MemoryInc			    = DMA_MemoryInc_Enable;         /* 内存地址寄存器递增 */
+	DMA_InitStructure.DMA_PeripheralDataSize	= DMA_PeripheralDataSize_Byte;  /* 数据宽度为8位 */
+	DMA_InitStructure.DMA_MemoryDataSize		= DMA_MemoryDataSize_Byte;      /* 数据宽度为8位 */
+	DMA_InitStructure.DMA_Mode			        = DMA_Mode_Circular;              /*  */
+	DMA_InitStructure.DMA_Priority			    = DMA_Priority_VeryHigh;          /* DMA通道 x拥有中优先级 */
+	DMA_InitStructure.DMA_M2M			        = DMA_M2M_Disable;              /* DMA通道x没有设置为内存到内存传输 */
+	
+	DMA_Init( DMA1_Channel5, &DMA_InitStructure );                                        /* 根据DMA_InitStruct中指定的参数初始化DMA的通道USART1_Rx_DMA_Channel所标识的寄存器 */
+	DMA_Cmd( DMA1_Channel5, ENABLE );
 }
 
 /**
@@ -58,46 +94,49 @@ void UART_DB_Init(uint32_t baud)
   * @参  数  无 
   * @返回值  无
   */
+char Return_BL_Cmd[] = {"sanger"};
 void USART1_IRQHandler(void)
 {
-//	uint8_t Res;
+	uint16_t uartRecCnt=0;
+	char cmp_temp[UART1_DMA_SIZE] = {0};
 	
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断
+	if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)  //接收中断
 	{
-//		Res =USART_ReceiveData(USART1);	
+		USART_ReceiveData(USART1);/* 清空闲中断标志位 */
 		
-		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-	} 
-}
-
-static uint8_t uart_db_flag_rx_ok = 0; //接收成功标志
-/**
-  * @简  述  获取接收的数据
-  * @参  数  *pbuf：接收数据指针,第1个字节为帧编码，后面为数据
-  * @返回值	 0-无数据接收，other-需要读取的数据字节个数
-  */
-uint8_t UART_DB_GetData(uint8_t *pbuf)
-{
-	uint8_t cnt,i;
-	
-	if(uart_db_flag_rx_ok != 0)
-	{
-		cnt = uart_db_rx_buf[2]-4;
+		DMA_Cmd(DMA1_Channel5, DISABLE ); 
+		uartRecCnt = sizeof(Uart1_DMA_Buffer) - DMA_GetCurrDataCounter(DMA1_Channel5);
+		DMA_SetCurrDataCounter(DMA1_Channel6, sizeof(Uart1_DMA_Buffer));
 		
-		for(i=0; i<cnt; i++)
+		/* Reset DMAy Channelx remaining bytes register */
+		UART1_DMA_Init(); //reinit
+		
+		DMA_Cmd(DMA1_Channel5, ENABLE); 
+		
+		memcpy(cmp_temp, Uart1_DMA_Buffer, uartRecCnt);
+		
+		if( strcmp(Return_BL_Cmd, cmp_temp) == 0)//比较一下是否是进BL的指令
 		{
-			*(pbuf+i) = uart_db_rx_buf[3+i];
+			//printf("%s , uartRecCnt: %d \r\n", Uart1_DMA_Buffer, uartRecCnt);
+			
+			if(((*(vu32*)(STM32_FLASH_BASE+4))&0xFF000000)==0x08000000)//判断BL里面主程序开始地址是否合法，是否为0X08XXXXXX.
+			{
+				printf("return to BL: 0x%08X...\r\n", STM32_FLASH_BASE);
+				iap_load_app(STM32_FLASH_BASE);//跳回BL
+			}
+			else
+			{
+				printf("illegal BL ADDR: %08x \r\n", ((*(vu32*)(STM32_FLASH_BASE+4))&0xFF000000));
+			}
+		}
+		else
+		{
+			printf("strcmp fail... \r\n");
 		}
 		
-		uart_db_flag_rx_ok = 0;
-		return cnt;
-	}
-	else
-	{
-		return 0;
-	}	
+		USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+	} 
 }
-
 
 
 /**************************串口打印相关函数重定义********************************/
